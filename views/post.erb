@@ -6,3 +6,11 @@
         <hr />
         <%= @row ['created_date']%>
     </p>
+<h4>Комментарии</h4>
+<p>
+    <form action="/post/<%= @row['id'] %>" method="POST" role="form">
+        <textarea name="addNewPost" class="form-control" rows="6" placeholder="Оставте комментарий к посту"></textarea>
+        </br>
+        <button type="submit" class="btn btn-primary">Отправить</button>
+    </form>
+</p>
