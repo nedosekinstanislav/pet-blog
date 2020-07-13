@@ -1,0 +1,10 @@
+<h1>Последние посты</h1>
+
+<% @results.each do |item| %>
+    <p>
+        <hr />
+        <%= item['input_text'] %>
+        <br />
+        <%= item ['created_date']%>
+    </p>
+<% end %>
