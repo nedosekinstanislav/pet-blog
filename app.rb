@@ -18,9 +18,9 @@ end
 configure do
   init_db
   # Создается таблица если таблица не существует 
-  @db.execute 'CREATE TABLE IF NOT EXISTS Posts ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "created_date" DATE, "content" TEXT)'
+  @db.execute 'CREATE TABLE IF NOT EXISTS Posts ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "created_date" DATE, "input_text" TEXT)'
   # Создается таблица с комментариями 
-  @db.execute 'CREATE TABLE IF NOT EXISTS Comments ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "created_date" DATE, "content" TEXT, "post_id" integer)'
+  @db.execute 'CREATE TABLE IF NOT EXISTS Comments ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "created_date" DATE, "input_text" TEXT, "post_id" integer)'
 end
 
 configure do
@@ -57,14 +57,22 @@ get '/post/:post_id' do
   results = @db.execute 'SELECT * FROM Posts WHERE ID = ?', [post_id]
   
   #Выбираем пост
-  @row = results[0] 
+  @row = results[0]
+  
+  # Выбираем комментарий для поста
+  @comments = @db.execute 'SELECT * FROM Comments WHERE post_id = ? ORDER BY ID', [post_id]
+
+  # Возвращаем представление для поста
   erb :post
 end
 
 post '/post/:post_id' do
   post_id = params[:post_id]
   input_text = params[:addNewPost]
-  erb " Вы ввели #{input_text} с таким номером #{post_id}"
+  
+  # Добавляем комментарий в БД
+  @db.execute 'INSERT INTO Comments (input_text, created_date, post_id) values (?, datetime(), ?)', [input_text, post_id] 
+  redirect ('/post/' + post_id)
 end
 
 get '/' do

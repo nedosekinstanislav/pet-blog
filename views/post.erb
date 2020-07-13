@@ -6,11 +6,20 @@
         <hr />
         <%= @row ['created_date']%>
     </p>
-<h4>Комментарии</h4>
-<p>
-    <form action="/post/<%= @row['id'] %>" method="POST" role="form">
-        <textarea name="addNewPost" class="form-control" rows="6" placeholder="Оставте комментарий к посту"></textarea>
-        </br>
-        <button type="submit" class="btn btn-primary">Отправить</button>
-    </form>
-</p>
+    <h4>Комментарии</h4>
+    <% @comments.each do |item| %>
+        <p>
+            <%= item['input_text'] %>
+            <br />
+            <span style="font-weight: bold;">Добавлен <%= item['created_date'] %></span>
+        </p>
+    <% end %>
+    <div>
+        <p>
+            <form action="/post/<%= @row['id'] %>" method="POST" role="form">
+                <textarea name="addNewPost" class="form-control" rows="6" placeholder="Оставте комментарий к посту"></textarea>
+                </br>
+                <button type="submit" class="btn btn-primary">Отправить</button>
+            </form>
+        </p>
+    </div>
