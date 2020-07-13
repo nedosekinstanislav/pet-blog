@@ -42,7 +42,16 @@ post '/new' do
     # Добавляем в БД постов
     @db.execute 'INSERT INTO Posts (input_text, created_date) values (?, datetime())', [input_text]
 
-  erb "Введено: #{input_text}"
+  redirect '/'
+end
+
+# Вывод информации о посте
+get '/post/:post_id' do
+  post_id = params[:post_id]
+  # Будет выбирать одну строку
+  results = @db.execute 'SELECT * FROM Posts WHERE ID = ?', [post_id]
+  @row = results[0] 
+  erb :post
 end
 
 get '/' do
