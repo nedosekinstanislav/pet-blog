@@ -19,6 +19,8 @@ configure do
   init_db
   # Создается таблица если таблица не существует 
   @db.execute 'CREATE TABLE IF NOT EXISTS Posts ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "created_date" DATE, "content" TEXT)'
+  # Создается таблица с комментариями 
+  @db.execute 'CREATE TABLE IF NOT EXISTS Comments ("id" INTEGER PRIMARY KEY AUTOINCREMENT, "created_date" DATE, "content" TEXT, "post_id" integer)'
 end
 
 configure do
@@ -57,6 +59,12 @@ get '/post/:post_id' do
   #Выбираем пост
   @row = results[0] 
   erb :post
+end
+
+post '/post/:post_id' do
+  post_id = params[:post_id]
+  input_text = params[:addNewPost]
+  erb " Вы ввели #{input_text} с таким номером #{post_id}"
 end
 
 get '/' do
